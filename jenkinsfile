@@ -1,0 +1,14 @@
+pipeline{
+    agen any
+    tools {
+        maven 'maven'
+}
+
+    stages{
+        stage('git checkout')
+    }
+    stages{
+        stage('build')
+        sh 'mvn clean package'
+    }
+}
