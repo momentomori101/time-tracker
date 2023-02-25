@@ -1,14 +1,43 @@
-pipeline{
+pipeline {
     agent any
-    tools {
-        maven 'maven'
-}
-
-    stages{
-        stage('git checkout')
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/momentomori101/time-tracker.git']]])
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
     }
-    stages{
-        stage('build')
-        sh 'mvn clean package'
-    }
 }
+        // stage('Publish to Nexus') {
+        //     steps {
+        //         nexusPublisher {
+        //             nexusUrl = 'http://your-nexus-server-url'
+        //             nexusUser = 'your-nexus-username'
+        //             nexusPassword = 'your-nexus-password'
+        //             repositories {
+        //                 repository {
+        //                     id = 'your-repo-id'
+        //                     name = 'your-repo-name'
+        //                     type = 'maven2'
+        //                     url = 'http://your-nexus-server-url/repository/your-repo-name/'
+        //                 }
+        //             }
+        //             artifacts {
+        //                 artifact {
+        //                     groupId = 'your-group-id'
+        //                     artifactId = 'your-artifact-id'
+        //                     version = '1.0-SNAPSHOT'
+        //                     type = 'jar'
+        //                     file = 'target/your-artifact.jar'
+        //                 }
+        //             }
+        //         }
+        //     }
+//          }
+//     }
+// }
