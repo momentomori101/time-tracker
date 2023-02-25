@@ -10,7 +10,6 @@ pipeline {
             steps {
                 sh 'mvn clean package'
             }
-            // jdfhv
         }
 }
         // stage('Publish to Nexus') {
