@@ -8,7 +8,7 @@ pipeline {
                     doGenerateSubmoduleConfigurations: false, 
                     extensions: [], 
                     submoduleCfg: [], 
-                    userRemoteConfigs: [[url: 'https://github.com/username/repo.git']]])
+                    userRemoteConfigs: [[url: 'https://github.com/momentomori101/time-tracker.git']]])
             }
         }
         stage('Build') {
@@ -26,16 +26,16 @@ pipeline {
                 sh 'mvn package'
             }
         }
-        stage('Deploy to Nexus') {
-            steps {
-                nexusArtifactUploader artifacts: 'target/*.jar',
-                    credentialsId: 'nexus-credentials',
-                    groupId: 'com.example',
-                    nexusUrl: 'https://nexus.example.com/',
-                    nexusVersion: 'nexus3',
-                    repository: 'maven-releases',
-                    version: '1.0-SNAPSHOT'
-            }
-        }
+        // stage('Deploy to Nexus') {
+        //     steps {
+        //         nexusArtifactUploader artifacts: 'target/*.jar',
+        //             credentialsId: 'nexus-credentials',
+        //             groupId: 'com.example',
+        //             nexusUrl: 'https://nexus.example.com/',
+        //             nexusVersion: 'nexus3',
+        //             repository: 'maven-releases',
+        //             version: '1.0-SNAPSHOT'
+        //     }
+        // }
     }
 }
