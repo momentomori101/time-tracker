@@ -1,17 +1,18 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        stage('Checkout') {extensions
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/momentomori101/time-tracker.git']]])
             }
+            ====
         }
         stage('Build') {
             steps {
                 sh 'mvn clean package'
             }
+            // jdfhv
         }
-    }
 }
         // stage('Publish to Nexus') {
         //     steps {
@@ -41,3 +42,4 @@ pipeline {
 //          }
 //     }
 // }
+// lfkv
