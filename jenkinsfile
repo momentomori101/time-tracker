@@ -24,6 +24,11 @@ pipeline {
         stage('Package') {
             steps {
                 sh 'mvn package'
+                script{
+                version = sh (script: 'cat version.txt', returnStdout: true).trim()
+                env.JAR_VERSION = version + "_$BUILD_NUMBER"
+                sh 'mvn package -Djar.finalName=${JAR_VERSION}'
+                }
             }
         }
         // stage('Deploy to Nexus') {
