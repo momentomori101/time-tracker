@@ -29,9 +29,6 @@ pipeline {
         steps {
             // sh 'mvn clean package'
             sh 'mvn package'
-            parameters {
-            string(name: 'VERSION', defaultValue: '1.0', description: 'The version of the jar file')
-            }
             script {
                 def date = new Date().format("yyyyMMdd")
                 def time = new Date().format("HHmmss")
