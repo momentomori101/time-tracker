@@ -23,14 +23,17 @@ pipeline {
         }
         stage('Package') {
         steps {
-            sh 'mvn clean package'
+            // sh 'mvn clean package'
+            sh 'mvn package'
             script {
                 def date = new Date().format("yyyyMMdd")
                 def time = new Date().format("HHmmss")
                 def version = "v1.0.${env.BUILD_NUMBER}"
                 def jarName = "GFSC-${version}-${date}.${time}.jar"
-                sh "mvn package -finalName.finalName=${jarName}"
-                archiveArtifacts artifacts: "**/${jarName}", onlyIfSuccessful: true
+                sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
+                // sh "mvn package -finalName.finalName=${jarName}"
+                archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
+                // archiveArtifacts artifacts: "**/${jarName}", onlyIfSuccessful: true
                 }
             }
         }
