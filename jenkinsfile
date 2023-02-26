@@ -32,8 +32,9 @@ pipeline {
                 def jarName = "GFSC-${version}-${date}.${time}.jar"
                 sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
                 // sh "mvn package -finalName.finalName=${jarName}"
-                archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
-                // archiveArtifacts artifacts: "**/${jarName}", onlyIfSuccessful: true
+                // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
+                sh "jar cvf ${jarName} target/"
+                archiveArtifacts artifacts: "**/${jarName}", onlyIfSuccessful: true
                 }
             }
         }
