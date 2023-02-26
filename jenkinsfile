@@ -25,12 +25,15 @@ pipeline {
         steps {
             // sh 'mvn clean package'
             sh 'mvn package'
+            parameters {
+            string(name: 'VERSION', defaultValue: '1.0', description: 'The version of the jar file')
+            }
             script {
                 def date = new Date().format("yyyyMMdd")
                 def time = new Date().format("HHmmss")
                 def version = "v1.0.${env.BUILD_NUMBER}"
                 def jarName = "GFSC-${version}-${date}.${time}.war"
-                sh "mvn package -Djar.finalName=${warName}"
+                // sh "mvn package -Djar.finalName=${warName}"
                 // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
                 // sh "mvn package -finalName.finalName=${jarName}"
                 // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
