@@ -25,9 +25,12 @@ pipeline {
             steps {
                 sh 'mvn package'
                 script{
-                def version = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
-                env.JAR_VERSION = "${version}_${BUILD_NUMBER}"
-                // This code uses the date command to generate a unique version number based on the current date and time in the format YYYYMMDDHHmmss. It then appends the Jenkins build number to create a version string that will be unique to each build. Finally, it sets the JAR_VERSION environment variable to this version string and passes it to Maven using the -Djar.finalName option to create the final packaged JAR file.
+                def timestamp = new Date().format("yyyyMMdd_HHmmss")
+                def version = sh(script: 'echo $VERSION', returnStdout: true).trim()
+                def jarName = "my-app-${version}_${timestamp}.jar"
+                sh "mvn package -Djar.finalName=${jarName}"
+                archiveArtifacts artifacts: "target/${jarName}", onlyIfSuccessful: true
+                // In this modified code, we use the Date() object to get the current date and time, and format it using the format() method to create a timestamp in the format "yyyyMMdd_HHmmss". Then, we concatenate this timestamp with the version number to create a unique jar file name for each build. Finally, we archive the jar file using the archiveArtifacts step.
                 // sh "mvn package -Djar.finalName=${JAR_VERSION}"
                 // version = sh (script: 'cat version.txt', returnStdout: true).trim()
                 // env.JAR_VERSION = version + "_$BUILD_NUMBER"
