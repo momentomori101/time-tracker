@@ -25,11 +25,11 @@ pipeline {
             steps {
                 sh 'mkdir -p target'
                 sh 'mvn package'
+                sh "mvn package -Djar.finalName=${jarName}"
                 script{
                     def timestamp = new Date().format("yyyyMMdd_HHmmss")
                     def version = sh(script: 'echo $VERSION', returnStdout: true).trim()
                     def jarName = "target-${version}_${timestamp}.war"
-                    sh "mvn package -Djar.finalName=${jarName}"
                     archiveArtifacts artifacts: "target/${jarName}", onlyIfSuccessful: true
                 }
             }
