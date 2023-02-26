@@ -25,9 +25,13 @@ pipeline {
             steps {
                 sh 'mvn package'
                 script{
-                version = sh (script: 'cat version.txt', returnStdout: true).trim()
-                env.JAR_VERSION = version + "_$BUILD_NUMBER"
-                sh 'mvn package -Djar.finalName=${JAR_VERSION}'
+                def version = sh(script: "date +%Y%m%d%H%M%S", returnStdout: true).trim()
+                env.JAR_VERSION = "${version}_${BUILD_NUMBER}"
+                // This code uses the date command to generate a unique version number based on the current date and time in the format YYYYMMDDHHmmss. It then appends the Jenkins build number to create a version string that will be unique to each build. Finally, it sets the JAR_VERSION environment variable to this version string and passes it to Maven using the -Djar.finalName option to create the final packaged JAR file.
+                // sh "mvn package -Djar.finalName=${JAR_VERSION}"
+                // version = sh (script: 'cat version.txt', returnStdout: true).trim()
+                // env.JAR_VERSION = version + "_$BUILD_NUMBER"
+                // sh 'mvn package -Djar.finalName=${JAR_VERSION}'
                 }
             }
         }
