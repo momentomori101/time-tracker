@@ -30,19 +30,18 @@ pipeline {
             steps {
             // sh 'mvn clean package'
                 sh 'mvn package'
-            }
-            script {
-                def date = new Date().format("yyyyMMdd")
-                def time = new Date().format("HHmmss")
-                def version = "v1.0.${env.BUILD_NUMBER}"
-                // def jarName = "GFSC-${version}-${date}.${time}.war"
-                def warName = "${env.APP_NAME}-${env.VERSION}-${date}.${time}.war"
-                // sh "mvn package -Djar.finalName=${warName}"
-                // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
-                // sh "mvn package -finalName.finalName=${jarName}"
-                // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
-                // sh "jar cvf ${jarName} target/"
-                archiveArtifacts artifacts: "${warName}", onlyIfSuccessful: true
+                script {
+                    def date = new Date().format("yyyyMMdd")
+                    def time = new Date().format("HHmmss")
+                    def version = "v1.0.${env.BUILD_NUMBER}"
+                    // def jarName = "GFSC-${version}-${date}.${time}.war"
+                    def warName = "${env.APP_NAME}-${env.VERSION}-${date}.${time}.war"
+                    // sh "mvn package -Djar.finalName=${warName}"
+                    // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
+                    // sh "mvn package -finalName.finalName=${jarName}"
+                    // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
+                    // sh "jar cvf ${jarName} target/"
+                    archiveArtifacts artifacts: "${warName}", onlyIfSuccessful: true
                 }
             }
         }
