@@ -27,9 +27,9 @@ pipeline {
             }
         }
         stage('Package') {
-        steps {
+            steps {
             // sh 'mvn clean package'
-            sh 'mvn package'
+                sh 'mvn package'
             }
             script {
                 def date = new Date().format("yyyyMMdd")
