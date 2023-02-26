@@ -23,14 +23,14 @@ pipeline {
         }
         stage('Package') {
         steps {
-            sh 'mkdir -p target'
-            sh 'mvn package'
+            sh 'mvn clean package'
             script {
-                def timestamp = new Date().format("yyyyMMdd_HHmmss")
-                def version = sh(script: 'echo $VERSION', returnStdout: true).trim()
-                def jarName = "app-${version}_${timestamp}.war"
-                sh "mvn package -Dmaven.build.directory=target -Djar.finalName=${jarName}"
-                archiveArtifacts artifacts: "target/${jarName}", onlyIfSuccessful: true
+                def date = new Date().format("yyyyMMdd")
+                def time = new Date().format("HHmmss")
+                def version = "v1.0.${env.BUILD_NUMBER}"
+                def jarName = "GFSC-${version}-${date}.${time}.jar"
+                sh "mvn package -finalName.finalName=${jarName}"
+                archiveArtifacts artifacts: "**/${jarName}", onlyIfSuccessful: true
                 }
             }
         }
