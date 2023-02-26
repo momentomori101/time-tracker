@@ -30,6 +30,7 @@ pipeline {
                 def time = new Date().format("HHmmss")
                 def version = "v1.0.${env.BUILD_NUMBER}"
                 def jarName = "GFSC-${version}-${date}.${time}.war"
+                sh "mvn package -Djar.finalName=${jarName}"
                 // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
                 // sh "mvn package -finalName.finalName=${jarName}"
                 // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
