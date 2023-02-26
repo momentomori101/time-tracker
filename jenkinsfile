@@ -27,7 +27,7 @@ pipeline {
                 script{
                 def timestamp = new Date().format("yyyyMMdd_HHmmss")
                 def version = sh(script: 'echo $VERSION', returnStdout: true).trim()
-                def jarName = "my-app-${version}_${timestamp}.jar"
+                def jarName = "GFSP_1-${version}_${timestamp}.war"
                 sh "mvn package -Djar.finalName=${jarName}"
                 archiveArtifacts artifacts: "target/${jarName}", onlyIfSuccessful: true
                 // In this modified code, we use the Date() object to get the current date and time, and format it using the format() method to create a timestamp in the format "yyyyMMdd_HHmmss". Then, we concatenate this timestamp with the version number to create a unique jar file name for each build. Finally, we archive the jar file using the archiveArtifacts step.
