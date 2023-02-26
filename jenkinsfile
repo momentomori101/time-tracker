@@ -1,5 +1,9 @@
 pipeline {
     agent any
+     parameters {
+        string(name: 'APP_NAME', defaultValue: 'GFSC', description: 'Name of the application')
+        string(name: 'VERSION', defaultValue: '1.0', description: 'Version number of the application')
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -32,7 +36,8 @@ pipeline {
                 def date = new Date().format("yyyyMMdd")
                 def time = new Date().format("HHmmss")
                 def version = "v1.0.${env.BUILD_NUMBER}"
-                def jarName = "GFSC-${version}-${date}.${time}.war"
+                // def jarName = "GFSC-${version}-${date}.${time}.war"
+                def jarName = "${env.APP_NAME}-${env.VERSION}-${date}.${time}.jar"
                 // sh "mvn package -Djar.finalName=${warName}"
                 // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
                 // sh "mvn package -finalName.finalName=${jarName}"
