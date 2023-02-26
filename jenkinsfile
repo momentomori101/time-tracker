@@ -29,12 +29,12 @@ pipeline {
                 def date = new Date().format("yyyyMMdd")
                 def time = new Date().format("HHmmss")
                 def version = "v1.0.${env.BUILD_NUMBER}"
-                def jarName = "GFSC-${version}-${date}.${time}.jar"
-                sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
+                def jarName = "GFSC-${version}-${date}.${time}.war"
+                // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
                 // sh "mvn package -finalName.finalName=${jarName}"
                 // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
                 sh "jar cvf ${jarName} target/"
-                archiveArtifacts artifacts: "**/${jarName}", onlyIfSuccessful: true
+                archiveArtifacts artifacts: "${jarName}", onlyIfSuccessful: true
                 }
             }
         }
