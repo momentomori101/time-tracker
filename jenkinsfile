@@ -29,6 +29,7 @@ pipeline {
                 def jarName = "GFSP_1-${version}_${timestamp}.war"
                 sh "mvn package -Dmaven.build.directory=target -Djar.finalName=${jarName}"
                 archiveArtifacts artifacts: "target/${jarName}", onlyIfSuccessful: true
+                }
             }
         }
 
