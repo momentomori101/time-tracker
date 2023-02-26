@@ -22,15 +22,16 @@ pipeline {
             }
         }
         stage('Package') {
-             steps {
-             sh 'mkdir -p target'
-             sh 'mvn package'
-             script{
-                 def timestamp = new Date().format("yyyyMMdd_HHmmss")
-                 def version = sh(script: 'echo $VERSION', returnStdout: true).trim()
-                 def jarName = "GFSP_1-${version}_${timestamp}.war"
-                 sh "mvn package -Djar.finalName=${jarName}"
-                 archiveArtifacts artifacts: "target/${jarName}", onlyIfSuccessful: true
+            steps {
+                sh 'mkdir -p target'
+                sh 'mvn package'
+                script{
+                    def timestamp = new Date().format("yyyyMMdd_HHmmss")
+                    def version = sh(script: 'echo $VERSION', returnStdout: true).trim()
+                    def jarName = "GFSP_1-${version}_${timestamp}.war"
+                    sh "mvn package -Djar.finalName=${jarName}"
+                    archiveArtifacts artifacts: "target/${jarName}", onlyIfSuccessful: true
+                }
             }
         }
         // stage('Deploy to Nexus') {
