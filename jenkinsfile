@@ -44,7 +44,7 @@ pipeline {
                     archiveArtifacts artifacts: "${warName}", onlyIfSuccessful: true
                 }
             }
-        
+        }
         // stage('Deploy to Nexus') {
         //     steps {
         //         nexusArtifactUploader artifacts: 'target/*.jar',
