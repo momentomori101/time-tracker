@@ -1,7 +1,7 @@
 pipeline {
     agent any
-    // parameters {
-        // string(name: 'APP_NAME', defaultValue: 'GFSC', description: 'Name of the application')
+    parameters {
+        string(name: 'APP_NAME', defaultValue: 'GFSC', description: 'Name of the application')
         // string(name: 'VERSION', defaultValue: '1.0', description: 'Version number of the application')
         // string(name: 'WAR_NAME', defaultValue: 'app', description: 'Name of the war file')
     }
@@ -26,43 +26,25 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        // stage('Package') {
-        //     steps {
-        //     // sh 'mvn clean package'
-        //         sh 'mvn package'
-        //         script {
-        //             def date = new Date().format("yyyyMMdd")
-        //             def time = new Date().format("HHmmss")
-        //             def version = "v1.0.${env.BUILD_NUMBER}"
-        //             // def jarName = "GFSC-${version}-${date}.${time}.war"
-        //             def warName = "${env.APP_NAME}-${env.VERSION}-${date}.${time}.war"
-        //             // sh "mvn package -Djar.finalName=${warName}"
-        //             // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
-        //             // sh "mvn package -finalName.finalName=${jarName}"
-        //             // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
-        //             // sh "jar cvf ${jarName} target/"
-        //             archiveArtifacts artifacts: "${warName}", onlyIfSuccessful: true
-        //         }
-        //     }
-        // stash step//start
-        stage('package') {
+        stage('Package') {
             steps {
-                sh 'mvn clean package'
-                stash name: 'war', includes: 'target/*.war'
-            }
-        }
-        stage('Deploy') {
-            steps {
+            // sh 'mvn clean package'
+                sh 'mvn package'
                 script {
-                    def version = sh(script: 'echo $VERSION', returnStdout: true).trim()
-                    def timestamp = new Date().format("yyyyMMdd_HHmmss")
-                    def warName = "GFSP_1-${version}_${timestamp}.war"
-                    sh "cp ${WORKSPACE}/target/*.war 'C:\\Users\\hp\\.jenkins\\workspace\\GFSP_1\\web\\target\\SNAPSHOT\\${warName}'"
+                    def date = new Date().format("yyyyMMdd")
+                    def time = new Date().format("HHmmss")
+                    def version = "v1.0.${env.BUILD_NUMBER}"
+                    // def jarName = "GFSC-${version}-${date}.${time}.war"
+                    def warName = "${env.APP_NAME}-${env.VERSION}-${date}.${time}.war"
+                    // sh "mvn package -Djar.finalName=${warName}"
+                    // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
+                    // sh "mvn package -finalName.finalName=${jarName}"
+                    // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
+                    // sh "jar cvf ${jarName} target/"
+                    archiveArtifacts artifacts: "${warName}", onlyIfSuccessful: true
                 }
             }
-        }
-        // end
-
+        
         // stage('Deploy to Nexus') {
         //     steps {
         //         nexusArtifactUploader artifacts: 'target/*.jar',
