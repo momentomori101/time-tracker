@@ -8,7 +8,7 @@ pipeline {
         string(name: 'VERSION', defaultValue: '1.0-SNAPSHOT', description: 'The version of the artifact to be deployed to Nexus')
         string(name: 'VMWARE_SSH_AGENT_CREDENTIALS', defaultValue: 'ubuntu', description: 'The ID of the VMware SSH agent credentials in Jenkins')
         string(name: 'VMWARE_SERVER', defaultValue: '192.168.193.128', description: 'The IP or hostname of the VMware server')
-        string(name: 'VMWARE_USERNAME', defaultValue: 'ubuntu', description: 'The username to use to log in to the VMware server')
+        string(name: 'VMWARE_USERNAME', defaultValue: 'remote', description: 'The username to use to log in to the VMware server')
         string(name: 'VMWARE_TARGET_DIRECTORY', defaultValue: '/opt/var/', description: 'The directory on the VMware server to copy the artifact to')
     }
     stages {
