@@ -1,9 +1,15 @@
 pipeline {
     agent any
     parameters {
-        // string(name: 'APP_NAME', defaultValue: 'GFSC', description: 'Name of the application')
-        string(name: 'VERSION', defaultValue: '1.0', description: 'Version number of the application')
-        // string(name: 'WAR_NAME', defaultValue: 'app', description: 'Name of the war file')
+        string(name: 'NEXUS_CREDENTIALS', defaultValue: '', description: 'The ID of the Nexus credentials in Jenkins')
+        string(name: 'NEXUS_URL', defaultValue: '', description: 'The URL of the Nexus repository')
+        string(name: 'NEXUS_VERSION', defaultValue: '', description: 'The version of the Nexus repository')
+        string(name: 'REPOSITORY', defaultValue: '', description: 'The repository name in Nexus')
+        string(name: 'VERSION', defaultValue: '1.0-SNAPSHOT', description: 'The version of the artifact to be deployed to Nexus')
+        string(name: 'VMWARE_SSH_AGENT_CREDENTIALS', defaultValue: 'remote', description: 'The ID of the VMware SSH agent credentials in Jenkins')
+        string(name: 'VMWARE_SERVER', defaultValue: '192.168.193.128', description: 'The IP or hostname of the VMware server')
+        string(name: 'VMWARE_USERNAME', defaultValue: 'ubuntu', description: 'The username to use to log in to the VMware server')
+        string(name: 'VMWARE_TARGET_DIRECTORY', defaultValue: '/opt/var/', description: 'The directory on the VMware server to copy the artifact to')
     }
     stages {
         stage('Checkout') {
@@ -28,37 +34,28 @@ pipeline {
         }
         stage('Package') {
             steps {
-            // sh 'mvn clean package'
-                sh 'mvn package'
-                script {
-                    def date = new Date().format("yyyyMMdd")
-                    def time = new Date().format("HHmmss")
-                    def version = "v1.0.${env.BUILD_NUMBER}"
-                    def folderName = "build_${version}_${timestamp}"
-                    // def jarName = "GFSC-${version}-${date}.${time}.war"
-                    // def warName = "${env.APP_NAME}-${env.VERSION}-${date}.${time}.war"
-                    sh "mkdir ${folderName}"
-                    sh "cp ${WORKSPACE}/target/*.war ${folderName}/GFSP_1-${version}_${timestamp}.war"
-                    sh "cp -R ${folderName} C:/Users/hp/.jenkins/workspace/GFSP_1/web/target/Snapshots/"
-                    // sh "mvn package -Djar.finalName=${warName}"
-                    // sh 'mvn package -DfinalName=GFSC-${version}-${date}.${time}.jar'
-                    // sh "mvn package -finalName.finalName=${jarName}"
-                    // archiveArtifacts artifacts: "target/GFSC-${version}-${date}.${time}.jar", onlyIfSuccessful: true
-                    // sh "jar cvf ${jarName} target/"
-                    // archiveArtifacts artifacts: "${warName}", onlyIfSuccessful: true
-                }
+                sh 'mvn clean package'
             }
         }
         // stage('Deploy to Nexus') {
         //     steps {
-        //         nexusArtifactUploader artifacts: 'target/*.jar',
-        //             credentialsId: 'nexus-credentials',
-        //             groupId: 'com.example',
-        //             nexusUrl: 'https://nexus.example.com/',
-        //             nexusVersion: 'nexus3',
-        //             repository: 'maven-releases',
-        //             version: '1.0-SNAPSHOT'
+        //         withCredentials([string(credentialsId: "${params.NEXUS_CREDENTIALS}", variable: 'NEXUS_CREDENTIALS')]) {
+        //             nexusArtifactUploader artifacts: "target/*.jar",
+        //                 credentialsId: "${params.NEXUS_CREDENTIALS}",
+        //                 groupId: 'com.example',
+        //                 nexusUrl: "${params.NEXUS_URL}",
+        //                 nexusVersion: "${params.NEXUS_VERSION}",
+        //                 repository: "${params.REPOSITORY}",
+        //                 version: "${params.VERSION}"
+        //         }
         //     }
         // }
+        stage('Copy to VMware server') {
+            steps {
+                withCredentials([sshAgent(credentials: ["${params.VMWARE_SSH_AGENT_CREDENTIALS}"])]) {
+                    sh "scp target/*.jar ${params.VMWARE_USERNAME}@${params.VMWARE_SERVER}:${params.VMWARE_TARGET_DIRECTORY}"
+                }
+            }
+        }
     }
 }
