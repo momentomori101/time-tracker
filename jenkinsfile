@@ -5,11 +5,11 @@ pipeline {
         // string(name: 'NEXUS_URL', defaultValue: '', description: 'The URL of the Nexus repository')
         // string(name: 'NEXUS_VERSION', defaultValue: '', description: 'The version of the Nexus repository')
         // string(name: 'REPOSITORY', defaultValue: '', description: 'The repository name in Nexus')
-        // string(name: 'VERSION', defaultValue: '1.0-SNAPSHOT', description: 'The version of the artifact to be deployed to Nexus')
-        // string(name: 'VMWARE_SSH_AGENT_CREDENTIALS', defaultValue: '75b5ba12-326d-4438-ba9a-53ce713400d8', description: 'The ID of the VMware SSH agent credentials in Jenkins')
-        // string(name: 'VMWARE_SERVER', defaultValue: '192.168.10.217', description: 'The IP or hostname of the VMware server')
-        // string(name: 'VMWARE_USERNAME', defaultValue: 'ubuntu', description: 'The username to use to log in to the VMware server')
-        // string(name: 'VMWARE_TARGET_DIRECTORY', defaultValue: '/home/ubuntu/Downloads', description: 'The directory on the VMware server to copy the artifact to')
+        string(name: 'VERSION', defaultValue: '1.0-SNAPSHOT', description: 'The version of the artifact to be deployed to Nexus')
+        string(name: 'VMWARE_SSH_AGENT_CREDENTIALS', defaultValue: '75b5ba12-326d-4438-ba9a-53ce713400d8', description: 'The ID of the VMware SSH agent credentials in Jenkins')
+        string(name: 'VMWARE_SERVER', defaultValue: '192.168.10.217', description: 'The IP or hostname of the VMware server')
+        string(name: 'VMWARE_USERNAME', defaultValue: 'ubuntu', description: 'The username to use to log in to the VMware server')
+        string(name: 'VMWARE_TARGET_DIRECTORY', defaultValue: '/home/ubuntu/Downloads', description: 'The directory on the VMware server to copy the artifact to')
     }
     stages {
         stage('Checkout') {
@@ -52,8 +52,8 @@ pipeline {
         // }
         stage('Copy to VMware server') {
             steps {
-                scp  C:\Users\hp\.jenkins\workspace\GFSP_1\web\target\time-tracker-web-0.5.0-SNAPSHOT.war ubuntu@192.168.10.217:/home/ubuntu/Downloads
-                // withCredentials([sshAgent(credentials: ["${params.VMWARE_SSH_AGENT_CREDENTIALS}"])]) {
+                // scp  C:\Users\hp\.jenkins\workspace\GFSP_1\web\target\time-tracker-web-0.5.0-SNAPSHOT.war ubuntu@192.168.10.217:/home/ubuntu/Downloads
+                withCredentials([sshAgent(credentials: ["${params.VMWARE_SSH_AGENT_CREDENTIALS}"])]) {
                     sh "scp target/*.jar ${params.VMWARE_USERNAME}@${params.VMWARE_SERVER}:${params.VMWARE_TARGET_DIRECTORY}"
                 }
             }
